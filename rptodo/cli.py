@@ -1,4 +1,5 @@
 """This module provides the RP To-Do CLI."""
+import typer
 
 from pathlib import Path
 from typing import List, Optional
@@ -215,3 +216,19 @@ def main(
     )
 ) -> None:
     return
+
+@app.command(name="s3objects")
+def list_s3() -> None:
+    """List all files in the S3 bucket"""
+    todoer = get_todoer()
+    s3objects = todoer.list_s3()
+    for s3object in s3objects:
+         typer.secho(s3object.key)
+
+@app.command(name="tdversions")
+def list_td() -> None:
+    """List all task definition versions for the ECS service task"""
+    todoer = get_todoer()
+    arns = todoer.list_td()
+    for arn in arns:
+         typer.secho(arn)

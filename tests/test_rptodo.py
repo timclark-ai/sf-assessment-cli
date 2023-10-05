@@ -148,3 +148,19 @@ def test_remove(mock_json_file, todo_id, expected):
 def test_remove_all(mock_json_file):
     todoer = rptodo.Todoer(mock_json_file)
     assert todoer.remove_all() == ({}, SUCCESS)
+
+def test_list_s3():
+    todoer = rptodo.Todoer(mock_json_file)
+    s3objects = todoer.list_s3()
+    i = 0
+    for s3object in s3objects:
+        i += 1
+    assert i > 0
+
+def test_list_td():
+    todoer = rptodo.Todoer(mock_json_file)
+    arns = todoer.list_td()
+    i = 0
+    for arn in arns:
+        i += 1
+    assert i > 0

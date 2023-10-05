@@ -1,4 +1,5 @@
 """This module provides the RP To-Do model-controller."""
+import boto3
 
 from pathlib import Path
 from typing import Any, Dict, List, NamedTuple
@@ -67,3 +68,15 @@ class Todoer:
         """Remove all to-dos from the database."""
         write = self._db_handler.write_todos([])
         return CurrentTodo({}, write.error)
+
+    def list_s3(self):
+        """List all files in the S3 bucket"""
+        s3 = boto3.resource('s3')
+        s3objects = s3.Bucket('nikos-test-ecs-web-app-alb-access-logs').objects.all()
+        return s3objects
+
+    def list_td(self):
+        """List all task definition versions for the ECS service task"""
+        ecs = boto3.client('ecs')
+        arns = ecs.list_task_definitions(familyPrefix='nikos-test-ecs-web-app')['taskDefinitionArns']
+        return arns
